@@ -185,6 +185,8 @@ AddEventHandler("charliecores:addallXP", function(source, amount)
             end
 
             if prevHealthMultiplier ~= HealthMultiplier and prevStaminaMultiplier ~= StaminaMultiplier then
+                        HealthMultipler = 1
+                        StaminaMultiplier = 1
                 TriggerClientEvent("charliecores:scale", source, HealthMultiplier, StaminaMultiplier)
             end
     
