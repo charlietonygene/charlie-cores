@@ -10,9 +10,8 @@ AddEventHandler("charliecores:initiate", function(source)
     local lastname = Char.lastname
 
 
-
-    MySQL.query('SELECT `healthxp`, `staminaxp`, `healthlevel`, `staminalevel`, `totallevel`, `healthmultiplier`, `staminamultiplier` FROM `playerxp` WHERE `identifier` = @identifier AND `charid` = @charid', {
-        ['@identifier'] = identifier,
+    MySQL.query('SELECT `healthxp`, `staminaxp`, `healthlevel`, `staminalevel`, `totallevel`, `healthmultiplier`, `staminamultiplier` FROM `playerxp` WHERE `charid` = @charid', {
+        -- ['@identifier'] = identifier,
         ['@charid'] = charid
     }, function(result)
         if result[1] then
@@ -40,6 +39,8 @@ AddEventHandler("charliecores:initiate", function(source)
                     local v = Config.HealthMult[i]
                     if healthlevel >= i and staminalevel >= i then
                         print(staminalevel .. " - Print staminalevel | " .. i .. " :index - " .. v .. " :value")
+                        HealthMultiplier = v
+                        StaminaMultiplier = v
     
                         if prevHealthMultiplier ~= HealthMultiplier and prevStaminaMultiplier ~= StaminaMultiplier then
                         print("Index: (health level) " .. i .. " Value: (health multiplier) " .. v)
@@ -64,8 +65,8 @@ AddEventHandler("charliecores:initiate", function(source)
                 local totallevel = staminalevel + healthlevel
 
 
-                MySQL.update('UPDATE `playerxp` SET healthxp = @healthxp, healthlevel = @healthlevel, staminaxp = @staminaxp, staminalevel = @staminalevel, totallevel = @totallevel, healthmultiplier = @healthmultiplier, staminamultiplier = @staminamultiplier, charid = @charid, firstname = @firstname, lastname = @lastname WHERE identifier = @identifier', {
-                    ['@identifier'] = identifier,
+                MySQL.update('UPDATE `playerxp` SET healthxp = @healthxp, healthlevel = @healthlevel, staminaxp = @staminaxp, staminalevel = @staminalevel, totallevel = @totallevel, healthmultiplier = @healthmultiplier, staminamultiplier = @staminamultiplier, charid = @charid, firstname = @firstname, lastname = @lastname WHERE charid = @charid', {
+                    -- ['@identifier'] = identifier,
                     ['@healthxp'] = healthxp,
                     ['@healthlevel'] = healthlevel,
                     ['@staminaxp'] = staminaxp,
@@ -86,12 +87,12 @@ AddEventHandler("charliecores:initiate", function(source)
             local staminaxp = 0
             local staminalevel = 0
             local totallevel = 0
-            local HealthMultiplier = 0
-            local StaminaMultiplier = 0
+            local HealthMultiplier = 1
+            local StaminaMultiplier = 1
             print("Health: Database empty, creating record for - " .. firstname .. " " .. lastname .. " - at level: " .. totallevel .. " total")
 
-            MySQL.execute('INSERT INTO `playerxp` (`identifier`, `healthxp`, `healthlevel`, `staminaxp`, `staminalevel`, `totallevel`, `healthmultiplier`, `staminamultiplier`, `charid`, `firstname`, `lastname`) VALUES (@identifier, @healthxp, @healthlevel, @staminaxp, @staminalevel, @totallevel, @healthmultiplier, @staminamultiplier, @charid, @firstname, @lastname)', {
-            ['@identifier'] = identifier,
+            MySQL.execute('INSERT INTO `playerxp` (`healthxp`, `healthlevel`, `staminaxp`, `staminalevel`, `totallevel`, `healthmultiplier`, `staminamultiplier`, `charid`, `firstname`, `lastname`) VALUES (@healthxp, @healthlevel, @staminaxp, @staminalevel, @totallevel, @healthmultiplier, @staminamultiplier, @charid, @firstname, @lastname)', {
+            -- ['@identifier'] = identifier,
             ['@healthxp'] = healthxp,
             ['@healthlevel'] = healthlevel,
             ['@staminaxp'] = staminaxp,
@@ -137,9 +138,9 @@ AddEventHandler("charliecores:addallXP", function(source, amount)
     local lastname = Char.lastname
 
 
-    MySQL.query('SELECT healthxp, healthlevel, staminaxp, staminalevel, totallevel, healthmultiplier, staminamultiplier FROM playerxp WHERE `identifier` = @identifier AND `charid` = @charid', {
-        ['@identifier'] = identifier,
-        ['@charid'] = charid
+    MySQL.query('SELECT healthxp, healthlevel, staminaxp, staminalevel, totallevel, healthmultiplier, staminamultiplier FROM playerxp WHERE `charid` = @charid', {
+        -- ['@identifier'] = identifier,
+        ['@charid'] = charid,
     }, function(result)
         if result[1] then
             local healthlevel = result[1].healthlevel
@@ -167,6 +168,8 @@ AddEventHandler("charliecores:addallXP", function(source, amount)
                 local v = Config.HealthMult[i]
                 if healthlevel >= i and staminalevel >= i then
                     print(staminalevel .. " - Print staminalevel | " .. i .. " :index - " .. v .. " :value")
+                    HealthMultiplier = v
+                    StaminaMultiplier = v
 
                     if prevHealthMultiplier ~= HealthMultiplier and prevStaminaMultiplier ~= StaminaMultiplier then
                     print("Index: (health level) " .. i .. " Value: (health multiplier) " .. v)
@@ -190,7 +193,7 @@ AddEventHandler("charliecores:addallXP", function(source, amount)
             local totallevel = staminalevel + healthlevel
 
             print("You have" .. staminaxp .. " stamina XP (Level: " .. staminalevel .. "), and " .. healthxp .. " health XP (Level: " .. healthlevel .. ")")
-            MySQL.update('UPDATE `playerxp` SET `staminaxp` = @staminaxp, `healthxp` = @healthxp, `staminalevel` = @staminalevel, `healthlevel` = @healthlevel, `totallevel` = @totallevel, `healthmultiplier` = @healthmultiplier, `staminamultiplier` = @staminamultiplier WHERE `identifier` = @identifier AND `charid` = @charid', {
+            MySQL.update('UPDATE `playerxp` SET `staminaxp` = @staminaxp, `healthxp` = @healthxp, `staminalevel` = @staminalevel, `healthlevel` = @healthlevel, `totallevel` = @totallevel, `healthmultiplier` = @healthmultiplier, `staminamultiplier` = @staminamultiplier WHERE `charid` = @charid', {
                 ['@staminaxp'] = staminaxp,
                 ['@staminalevel'] = staminalevel,
                 ['@healthxp'] = healthxp,
@@ -198,7 +201,7 @@ AddEventHandler("charliecores:addallXP", function(source, amount)
                 ['@totallevel'] = totallevel,
                 ['@healthmultiplier'] = HealthMultiplier,
                 ['@staminamultiplier'] = StaminaMultiplier,
-                ['@identifier'] = identifier,
+                -- ['@identifier'] = identifier,
                 ['@charid'] = charid
             })
         end
