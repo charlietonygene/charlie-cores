@@ -1,6 +1,5 @@
 CREATE TABLE IF NOT EXISTS `playerxp` (
     `id` int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
-    `identifier` VARCHAR(50) NOT NULL,
     `charid` int(11) NOT NULL,
     `character` int(11) NOT NULL,
     `firstname` VARCHAR(50) NOT NULL,
