@@ -17,6 +17,4 @@ server_scripts {
   '@vorp_core/client/dataview.lua',
 }
 
-server_export 'giveXP'
-
 dependency '/assetpacks'
