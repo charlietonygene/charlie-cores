@@ -139,8 +139,7 @@ AddEventHandler("charliecores:addallXP", function(source, amount)
 
 
     MySQL.query('SELECT healthxp, healthlevel, staminaxp, staminalevel, totallevel, healthmultiplier, staminamultiplier FROM playerxp WHERE `charid` = @charid', {
-        -- ['@identifier'] = identifier,
-        ['@charid'] = charid,
+        ['@charid'] = charid
     }, function(result)
         if result[1] then
             local healthlevel = result[1].healthlevel
@@ -203,15 +202,29 @@ AddEventHandler("charliecores:addallXP", function(source, amount)
                 ['@totallevel'] = totallevel,
                 ['@healthmultiplier'] = HealthMultiplier,
                 ['@staminamultiplier'] = StaminaMultiplier,
-                -- ['@identifier'] = identifier,
                 ['@charid'] = charid
             })
         end
     end)
 end)
 
+-- UI --
+function GetPlayerXP(source)
+        MySQL.query('SELECT healthxp, healthlevel, staminaxp, staminalevel, totallevel, healthmultiplier, staminamultiplier FROM playerxp WHERE `charid` = @charid', {
+        ['@charid'] = charid
+    }, function(result)
+        local dbHealthLevel = result[1].healthlevel
+        local dbStaminaLevel = result[1].staminalevel
+        local dbTotalLevel = result[1].totallevel
+        VORPcore.NotifySimpleTop(_source, "Player Level: ", dbTotalLevel, 3000) 
+end
+
 RegisterCommand("giveallXP", function(source, args)
     local amount = tonumber(args[1])
     TriggerEvent("charliecores:addallXP", source, amount)
 
+end)
+
+RegisterCommand("checklevel", function(source)
+    GetPlayerXP(source)
 end)
