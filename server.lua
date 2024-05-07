@@ -217,7 +217,7 @@ function GetPlayerXP(source)
         local dbStaminaLevel = result[1].staminalevel
         local dbTotalLevel = result[1].totallevel
         VORPcore.NotifySimpleTop(_source, "Player Level: ", dbTotalLevel, 3000) 
-end
+end)
 
 RegisterCommand("giveallXP", function(source, args)
     local amount = tonumber(args[1])
