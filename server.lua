@@ -194,6 +194,7 @@ AddEventHandler("charliecores:addallXP", function(source, amount)
             local totallevel = staminalevel + healthlevel
 
             print("You have" .. staminaxp .. " stamina XP (Level: " .. staminalevel .. "), and " .. healthxp .. " health XP (Level: " .. healthlevel .. ")")
+            VORPcore.NotifyRightTip(source, "You have received " .. amount .. "xp", 4000)
             MySQL.update('UPDATE `playerxp` SET `staminaxp` = @staminaxp, `healthxp` = @healthxp, `staminalevel` = @staminalevel, `healthlevel` = @healthlevel, `totallevel` = @totallevel, `healthmultiplier` = @healthmultiplier, `staminamultiplier` = @staminamultiplier WHERE `charid` = @charid', {
                 ['@staminaxp'] = staminaxp,
                 ['@staminalevel'] = staminalevel,
@@ -210,13 +211,22 @@ end)
 
 -- UI --
 function GetPlayerXP(source)
+    local User = VORPcore.getUser(source)
+    local Char = User.getUsedCharacter
+    local identifier = Char.identifier
+    local charid = Char.charIdentifier
         MySQL.query('SELECT healthxp, healthlevel, staminaxp, staminalevel, totallevel, healthmultiplier, staminamultiplier FROM playerxp WHERE `charid` = @charid', {
         ['@charid'] = charid
     }, function(result)
+        if result[1] then
         local dbHealthLevel = result[1].healthlevel
+        print(dbHealthLevel .. "dbHealthLevel")
         local dbStaminaLevel = result[1].staminalevel
         local dbTotalLevel = result[1].totallevel
-        VORPcore.NotifySimpleTop(_source, "Player Level: ", dbTotalLevel, 3000) 
+        VORPcore.NotifyBottomRight(source, "Player Level: " .. dbHealthLevel, 4500) 
+        else
+            print("Data not found for character")
+        end
     end)
 end
 
