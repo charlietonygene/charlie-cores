@@ -1,4 +1,4 @@
-# WIP charlie-cores
+# charlie-cores
 ## *Requirements & Features*
 >### **Requires **[VORP-Core](https://github.com/VORPCORE/VORP-Core)****
 >Currently requires disabling `function FillUpCores()` from `vorp_core/client/miscellanea.lua`
